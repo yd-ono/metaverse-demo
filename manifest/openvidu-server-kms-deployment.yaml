@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: openvidu-server-kms
+  name: openvidu-server-kms
+  namespace: openvidu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openvidu-server-kms
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: openvidu-server-kms
+    spec:
+      containers:
+      - env:
+        - name: CERTIFICATE_TYPE
+          value: letsencrypt
+        - name: LETSENCRYPT_EMAIL
+          value: yono@redhat.com
+        - name: DOMAIN_OR_PUBLIC_IP
+          value: openvidu-openvidu.apps.cluster-68v6c.68v6c.sandbox1604.opentlc.com
+        - name: OPENVIDU_SECRET
+          value: vrtest123
+        - name: COTURN_IP
+          value: aa1e14c92c9964558a30456e977707f7-979d08e72941d124.elb.us-east-2.amazonaws.com 
+        - name: COTURN_PORT
+          value: "3489"
+        - name: COTURN_REDIS_IP
+          value: redis
+        - name: COTURN_REDIS_PASSWORD
+          value: vrtest123
+        - name: KMS_STUN_IP
+          value: aa1e14c92c9964558a30456e977707f7-979d08e72941d124.elb.us-east-2.amazonaws.com
+        - name: KMS_STUN_PORT
+          value: "3489"
+        - name: KMS_TURN_URL
+          value: myopenvidu:vrtest123@aa1e14c92c9964558a30456e977707f7-979d08e72941d124.elb.us-east-2.amazonaws.com:3489
+        - name: KMS_MAX_PORT
+          value: "40005"
+        - name: KMS_MIN_PORT
+          value: "40000"
+        - name: GST_DEBUG
+          value: 1,Kurento*:5,kms*:5,sdp*:5,webrtc*:5,*rtpendpoint:5,rtp*handler:5,rtpsynchronizer:5,agnosticbin:5
+        - name: OPENVIDU_WEBRTC_ICE_SERVERS
+          value: '["url=turns:aa1e14c92c9964558a30456e977707f7-979d08e72941d124.elb.us-east-2.amazonaws.com:3489,username=myopenvidu,credential=vrtest123"]'
+        - name: SERVER_SSL_ENABLED
+          value: "false"
+        - name: HTTPS_PORT
+          value: "443"
+        - name: HTTP_PORT
+          value: "80"
+        image: openvidu/openvidu-server-kms:2.21.0
+        imagePullPolicy: IfNotPresent
+        name: openvidu-server-kms
+        ports:
+        - containerPort: 9091
+          protocol: TCP
+        - containerPort: 443
+          protocol: TCP
+        - containerPort: 8888
+          protocol: TCP
+      restartPolicy: Always
+      serviceAccount: openvidu
+      serviceAccountName: openvidu
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: openvidu-server-kms
+  namespace: openvidu
+  labels:
+    app: openvidu-server-kms
+spec:
+  ports:
+    - name: 443-tcp
+      protocol: TCP
+      port: 443
+      targetPort: 443
+    - name: 8888-tcp
+      protocol: TCP
+      port: 8888
+      targetPort: 8888
+    - name: 9091-tcp
+      protocol: TCP
+      port: 9091
+      targetPort: 9091
+  type: ClusterIP
+  selector:
+    app: openvidu-server-kms

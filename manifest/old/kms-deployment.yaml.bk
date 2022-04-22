@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app: kurento
+  labels:
+    io.openvidu.service: kms
+  name: kms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.openvidu.service: kms
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        app: kurento
+      labels:
+        io.openvidu.service: kms
+    spec:
+      containers:
+        - env:
+            - name: GST_DEBUG
+              value: "1,Kurento*:5,kms*:5,sdp*:5,webrtc*:5,*rtpendpoint:5,rtp*handler:5,rtpsynchronizer:5,agnosticbin:5" 
+           # - name: KMS_MAX_PORT
+           #   value: "50009"
+           # - name: KMS_MIN_PORT
+           #   value: "50000"
+            - name: KURENTO_LOGS_PATH
+              value: /opt/openvidu/kurento-logs
+            - name: KURENTO_LOG_FILE_SIZE
+              value: "100"
+            - name: KMS_TURN_URL
+              value: "myopenvidu:vrtest123@20.120.74.213:3478"
+            - name: KMS_STUN_IP
+              value: "20.120.74.213"
+            - name: KMS_STUN_PORT
+              value: "3478"
+          image: kurento/kurento-media-server:6.16.0
+          name: kms
+          ports:
+            - containerPort: 8888 
+              name: kms-listen
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app: kurento
+  labels:
+    io.openvidu.service: kms
+  name: kms
+spec:
+  clusterIP: None
+  ports:
+    - name: kms-listen
+      port: 8888
+      targetPort: kms-listen
+      protocol: TCP 
+  selector:
+    io.openvidu.service: kms
