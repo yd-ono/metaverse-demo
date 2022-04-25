@@ -1,4 +1,10 @@
 # vr-webrtc-demo
+
+## 環境
+- ARO
+
+## Public IPを取得
+
 ```
 az network public-ip create --resource-group $RESOURCEGROUP --name turnpublic --sku Standard --ip-tags Internet  --allocation-method static
 ```
@@ -38,8 +44,9 @@ oc adm policy add-scc-to-user anyuid -z vrspace
 cat Dockerfile | oc new-build --dockerfile=- --to=vrspace
 oc apply -f manifest/vrspace/vrspace-deployment.yaml
 oc apply -f manifest/vrspace/vrspace-route.yaml
+```
 
-# OpenVIDU
+## OpenVIDU
 
 ```
 oc new-project openvidu
