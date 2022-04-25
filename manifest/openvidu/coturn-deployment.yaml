@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app: coturn
+  labels:
+    io.openvidu.service: coturn
+  name: coturn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.openvidu.service: coturn
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        app: conturn
+      labels:
+        io.openvidu.service: coturn
+    spec:
+      serviceAccount: openvidu 
+      serviceAccountName: openvidu
+      containers:
+        - args:
+            - --log-file=stdout
+            - --listening-port=3478
+            - --listening-ip=0.0.0.0
+            - --external-ip=${TURNIP}
+            - --no-tls
+            - --no-dtls
+            - --fingerprint
+            - --lt-cred-mech
+            - --min-port=57001
+            - --max-port=57101
+            - --realm=openvidu-openvidu.$BASE_DOMAIN
+            - --user=myopenvidu:vrtest123
+            - --verbose
+          env:
+            - name: DB_NAME
+              value: "0"
+            - name: DB_PASSWORD
+              value: vrtest123
+            - name: REDIS_IP
+              value: redis 
+          image: openvidu/openvidu-coturn:6.0.0
+          name: coturn
+          ports:
+            - containerPort: 3478
+              name: tcp-3478
+              protocol: TCP
+            - containerPort: 3478
+              name: udp-3478
+              protocol: UDP 
+            {{- range seq 0 100}}
+            - containerPort: {{add 57001 .}}
+              name: tcp-{{add 57001 .}}
+              protocol: TCP
+            {{- end }}
+            {{- range seq 0 100}}
+            - containerPort: {{add 57001 .}}
+              name: udp-{{add 57001 .}}
+              protocol: UDP
+            {{- end }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app: coturn
+    metallb.universe.tf/address-pool: addresspool
+    metallb.universe.tf/allow-shared-ip: "share-${TURNIP}"
+  labels:
+    io.openvidu.service: coturn
+  name: coturn-tcp
+spec:
+  type: LoadBalancer
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Local
+  loadbalancerIP: ${TURNIP}
+  ports:
+  - name: tcp-3478
+    port: 3478
+    targetPort: tcp-3478
+    protocol: TCP
+  {{- range seq 0 100}}
+  - name: tcp-{{add 57001 .}}
+    port: {{add 57001 .}}
+    protocol: TCP
+    targetPort: {{add 57001 .}}
+  {{- end }}
+  selector:
+    io.openvidu.service: coturn
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app: coturn
+    metallb.universe.tf/address-pool: addresspool
+    metallb.universe.tf/allow-shared-ip: "share-${TURNIP}"
+  labels:
+    io.openvidu.service: coturn
+  name: coturn-udp
+spec:
+  type: LoadBalancer 
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Local
+  loadbalancerIP: ${TURNIP}
+  ports:
+  - name: udp-3478
+    port: 3478
+    targetPort: udp-3478
+    protocol: UDP
+  {{- range seq 0 100}}
+  - name: udp-{{add 57001 .}}
+    port: {{add 57001 .}}
+    protocol: UDP
+    targetPort: {{add 57001 .}}
+  {{- end }}
+  selector:
+    io.openvidu.service: coturn

@@ -1,0 +1,13 @@
+apiVersion: metallb.io/v1alpha1
+kind: AddressPool
+metadata:
+  labels:
+    app: openvidu
+  name: addresspool
+  namespace: metallb-system
+spec:
+  addresses:
+    - ${TURNIP}
+  autoAssign: false 
+  name: addresses
+  protocol: layer2

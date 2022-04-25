@@ -1,0 +1,21 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app: vrspace
+  name: vrspace
+  namespace: vrspace
+spec:
+  host: vrspace-vrspace.${BASE_DOMAIN}
+  port:
+    targetPort: "8080"
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
+  to:
+    kind: Service
+    name: vrspace
+    weight: 100
+  wildcardPolicy: None

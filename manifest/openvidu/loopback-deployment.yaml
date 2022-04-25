@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loopback
+  io.openvidu.service: loopback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.openvidu.service: loopback
+  template:
+    metadata:
+      labels:
+        io.openvidu.service: loopback
+    spec:
+      containers:
+      - name: loopback
+        image: nmatsui/kurento-robot-camera-loopback:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: loopback
+        env:
+        - name: PORT
+          value: "3000"
+        - name: KURENTO_URL
+          value: "ws://kurento-0.kurento:8888/kurento"
+        - name: APPSERVER_URL
+          value: "http://loopback:3000/"
+        - name: OVERLAY_IMG_PATH
+          value: "static/img/mario-wings.png"
+        - name: STUN_LIST
+          valueFrom:
+            secretKeyRef:
+              name: loopback-secrets
+              key: STUN_LIST
+        - name: TURN_LIST
+          valueFrom:
+            secretKeyRef:
+              name: loopback-secrets
+              key: TURN_LIST
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loopback
+  labels:
+    app: loopback
+spec:
+  type: ClusterIP
+  selector:
+    io.openvidu.service: loopback
+  ports:
+  - port: 3000
+    targetPort: loopback
+    name: loopback

@@ -1,0 +1,21 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    io.openvidu.service: loopback
+  name: loopback
+  namespace: openvidu
+spec:
+  host: loopback-openvidu.${BASE_DOMAIN}
+  port:
+    targetPort: "3000"
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
+  to:
+    kind: Service
+    name: loopback 
+    weight: 100
+  wildcardPolicy: None
