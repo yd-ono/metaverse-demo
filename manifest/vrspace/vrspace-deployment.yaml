@@ -45,6 +45,7 @@ metadata:
   labels:
     app: vrspace
   name: vrspace
+  namespace: vrspace
 spec:
   ports:
   - name: 8080-tcp

@@ -49,5 +49,5 @@ oc create sa vrspace
 oc adm policy add-scc-to-user anyuid -z vrspace
 cat manifest/vrspace/Dockerfile | oc new-build --dockerfile=- --to=vrspace
 oc apply -f manifest/vrspace/vrspace-deployment.yaml
-oc apply -f manifest/vrspace/vrspace-route.yaml
+cat manifest/vrspace/vrspace-route.yaml | envsubst | oc apply -f -
 ```
