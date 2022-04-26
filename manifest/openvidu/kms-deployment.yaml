@@ -26,7 +26,7 @@ spec:
             - name: GST_DEBUG
               value: "[1,Kurento*:5,kms*:5,sdp*:5,webrtc*:5,*rtpendpoint:5,rtp*handler:5]"
             - name: KMS_MAX_PORT
-              value: "40100"
+              value: "57000"
             - name: KMS_MIN_PORT
               value: "40000"
             - name: KURENTO_LOGS_PATH
@@ -34,27 +34,17 @@ spec:
             - name: KURENTO_LOG_FILE_SIZE
               value: "100"
             - name: KMS_TURN_URL
-              value: "myopenvidu:vrtest123@${TURNIP}:3489"
+              value: "myopenvidu:vrtest123@${TURNIP}:3478"
             - name: KMS_STUN_IP
               value: "${TURNIP}"
             - name: KMS_STUN_PORT
-              value: "3489"
+              value: "3478"
           image: kurento/kurento-media-server:6.16.0
           name: kurento 
           ports:
             - containerPort: 8888 
               name: kms-listen
               protocol: TCP      
-            {{- range seq 0 100}}
-            - containerPort: {{add 40000 .}}
-              protocol: UDP 
-              name: udp-{{add 40000 .}}
-            {{- end }}
-            {{- range seq 0 100}}
-            - containerPort: {{add 40000 .}}
-              protocol: TCP
-              name: tcp-{{add 40000 .}}
-            {{- end }}
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -74,43 +64,3 @@ spec:
       Protocol: TCP
   selector:
     io.openvidu.service: kurento 
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    app: kurento
-  labels:
-    io.openvidu.service: kurento
-  name: kurento-udp
-spec:
-  clusterIP: None
-  ports:
-  {{- range seq 0 100}}
-    - name: udp-{{add 40000 .}}
-      port: {{add 40000 .}}
-      protocol: UDP 
-      targetPort: {{add 40000 .}}
-  {{- end }}
-  selector:
-    io.openvidu.service: kurento
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    app: kurento
-  labels:
-    io.openvidu.service: kurento
-  name: kurento-tcp
-spec:
-  clusterIP: None
-  ports:
-  {{- range seq 0 100}}
-    - name: tcp-{{add 40000 .}}
-      port: {{add 40000 .}}
-      protocol: TCP
-      targetPort: {{add 40000 .}}
-  {{- end }}
-  selector:
-    io.openvidu.service: kurento

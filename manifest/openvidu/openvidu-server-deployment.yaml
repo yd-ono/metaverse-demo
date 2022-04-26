@@ -25,14 +25,12 @@ spec:
         - command:
             - /usr/local/bin/entrypoint.sh
           env:
-            - name: OPENVIDU_WEBRTC_ICE_SERVERS
-              value: '["url=turn:${TURNIP}:3489,username=myopenvidu,credential=vrtest123"]'
             - name: CERTIFICATE_TYPE
               value: letsencrypt
             - name: COTURN_IP
               value: ${TURNIP}
             - name: COTURN_PORT
-              value: "3489"
+              value: "3478"
             - name: COTURN_REDIS_IP
               value: redis
             - name: COTURN_REDIS_PASSWORD

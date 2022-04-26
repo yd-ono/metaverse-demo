@@ -30,15 +30,9 @@ spec:
         - name: OVERLAY_IMG_PATH
           value: "static/img/mario-wings.png"
         - name: STUN_LIST
-          valueFrom:
-            secretKeyRef:
-              name: loopback-secrets
-              key: STUN_LIST
+          value: "$TURNIP:3478"
         - name: TURN_LIST
-          valueFrom:
-            secretKeyRef:
-              name: loopback-secrets
-              key: TURN_LIST
+          value: "myopenvidu:vrtest123@$TURNIP:3478"
 ---
 apiVersion: v1
 kind: Service
