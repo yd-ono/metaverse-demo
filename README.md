@@ -46,8 +46,14 @@ gomplate -f manifest/openvidu/openvidu-server-route.yaml | envsubst | oc apply -
 ```
 oc new-project vrspace
 oc create sa vrspace
-oc adm policy add-scc-to-user anyuid -z vrspace
+oc adm policy add-scc-to-user privileged -z vrspace
 cat manifest/vrspace/Dockerfile | oc new-build --dockerfile=- --to=vrspace
-oc apply -f manifest/vrspace/vrspace-deployment.yaml
+oc new-app vrspace:latest
+oc set sa deployment/vrspace vrspace
+```
+
+```
 cat manifest/vrspace/vrspace-route.yaml | envsubst | oc apply -f -
 ```
+
+access to https://https://vrspace-vrspace.${BASE_DOMAIN}/avatar-selection.html
