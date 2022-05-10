@@ -79,8 +79,8 @@ https://${OPENVIDU_SERVER_URL}へアクセスし、TURNサーバ経由でビデ�
 
 ## VRSpace
 
-[GitHub](https://github.com/jalmasi/vrspace)をforkしたhttps://github.com/yd-ono/vrspaceベースにDockerでコンテナイメージを作成します。
-オリジナルのコードはlocalhostで実行する前提になっており、以下のopenvidu-serverとvrspaceのサーバURLを修正しています。
+[GitHub](https://github.com/jalmasi/vrspace)をforkした https://github.com/yd-ono/vrspace を用いてコンテナイメージを作成します。
+オリジナルはlocalhostで実行する前提になっており、以下の箇所を修正しています。
 
 - vrspace/babylon/video-test.js
   - OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
