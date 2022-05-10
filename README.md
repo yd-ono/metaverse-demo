@@ -128,4 +128,4 @@ gomplate -f manifest/vrspace/vrspace-deployment.yaml | envsubst | oc apply -f -
 cat manifest/vrspace/vrspace-route.yaml | envsubst | oc apply -f -
 ```
 
-access to https://${VRSPACE_SERVER_URL}/babylon/avatar-selection.html
+https://${VRSPACE_SERVER_URL}/babylon/avatar-selection.html へアクセスします。
