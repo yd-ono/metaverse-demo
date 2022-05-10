@@ -42,6 +42,7 @@ AWS上にdeployする場合、NLBが新規作成され、DNSレコードが更�
 
 ```
 export TURN_DOMAIN=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
+## Azureをしようしている場合はexport TURNIP=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].ip}'`のみ
 export TURNIP=`dig $TURN_DOMAIN | grep -v ";" | grep $TURN_DOMAIN  | awk '{print $5}'`
 ```
 
@@ -114,9 +115,6 @@ export VRSPACE_SERVER_URL=vrspace.${BASE_DOMAIN}
 ```
 oc new-project vrspace
 oc create sa vrspace
-```
-
-```
 oc adm policy add-scc-to-user privileged -z vrspace
 ```
 

@@ -33,7 +33,7 @@ spec:
             - --lt-cred-mech
             - --min-port=57001
             - --max-port=57011
-            - --realm=openvidu-openvidu.$BASE_DOMAIN
+            - --realm=video.$BASE_DOMAIN
             - --user=${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}
             - --verbose
           env:
