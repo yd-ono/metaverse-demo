@@ -3,6 +3,7 @@ kind: Service
 metadata:
   annotations:
     app: coturn
+    # if you use Azure, delete the following
     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
     service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
   labels:
