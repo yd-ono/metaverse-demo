@@ -31,8 +31,7 @@ gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 DNSレコードが更新されるまで1分ほど待ちます。
 
 ```
-export TURN_DOMAIN=`oc get svc coturn-tcp -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
-export TURNIP=`dig $TURN_DOMAIN | grep -v ";" | grep $TURN_DOMAIN  | awk '{print $5}'`
+export TURNIP=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
 export MAILADDR=<your mail address>
 export BASE_DOMAIN=<your base domain>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
