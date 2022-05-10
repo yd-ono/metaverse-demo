@@ -73,9 +73,16 @@ https://${OPENVIDU_SERVER_URL}へアクセスし、TURNサーバ経由でビデ�
 
 [GitHub](https://github.com/jalmasi/vrspace)をforkしたhttps://github.com/yd-ono/vrspaceベースにDockerでコンテナイメージを作成します。
 オリジナルのコードはlocalhostで実行する前提になっており、以下のopenvidu-serverとvrspaceのサーバURLを修正しています。
-- vrspace/babylon/video-test.js -> OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
-- vrspace/babylon/sound-test.js -> OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
-- vrspace/server/src/main/resources/application.propertiesの`openvidu.publicurl`, `openvidu.secret`, `sketchfab.redirectUri`, `spring.security.oauth2.client.registration.facebook.redirect-uri`, `spring.security.oauth2.client.registration.google.redirect-uri`を修正
+- vrspace/babylon/video-test.js
+-- OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+- vrspace/babylon/sound-test.js
+-- OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+- vrspace/server/src/main/resources/application.propertiesの
+-- `openvidu.publicurl`
+-- `openvidu.secret`
+-- `sketchfab.redirectUri`
+-- `spring.security.oauth2.client.registration.facebook.redirect-uri`
+-- `spring.security.oauth2.client.registration.google.redirect-uri`を修正
 
 自分のGitHubへforkした場合は以下の環境変数を変更してください。
 ```
