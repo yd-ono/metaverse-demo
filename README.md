@@ -39,7 +39,8 @@ DNSレコードが更新されるまで1分ほど待ちます。
 続いて以下の環境変数をセットします。
 
 ```
-export TURNIP=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
+export TURN_DOMAIN=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
+export TURNIP=`dig $TURN_DOMAIN | grep -v ";" | grep $TURN_DOMAIN  | awk '{print $5}'`
 export MAILADDR=<your mail address>
 export BASE_DOMAIN=<your base domain>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
