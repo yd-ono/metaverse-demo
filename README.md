@@ -47,20 +47,25 @@ export STUN_LIST=`echo $TURNIP:3489 | base64`
 export TURN_LIST=`echo ${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@$TURNIP:3489 | base64`
 ```
 
+coturnの`--external-ip`オプションをServiceのExternal IPで更新します。
+
 ```
 gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 ```
 
+残りのアプリケーションもdeployします。
+
 ```
 gomplate -f manifest/openvidu/kms-deployment.yaml | envsubst | oc apply -f -
-gomplate -f manifest/openvidu/loopback-deployment.yaml | envsubst | oc apply -f -
 gomplate -f manifest/openvidu/openvidu-server-deployment.yaml | envsubst | oc apply -f -
 ```
 
+Routeを作成します。
+
 ```
-gomplate -f manifest/openvidu/loopback-route.yaml | envsubst | oc apply -f -
 gomplate -f manifest/openvidu/openvidu-server-route.yaml | envsubst | oc apply -f -
 ```
+
 
 ```
 export OPENVIDU_SERVER_URL=`oc get route openvidu-server -o jsonpath='{.status.ingress[*].host}'`
@@ -73,16 +78,19 @@ https://${OPENVIDU_SERVER_URL}へアクセスし、TURNサーバ経由でビデ�
 
 [GitHub](https://github.com/jalmasi/vrspace)をforkしたhttps://github.com/yd-ono/vrspaceベースにDockerでコンテナイメージを作成します。
 オリジナルのコードはlocalhostで実行する前提になっており、以下のopenvidu-serverとvrspaceのサーバURLを修正しています。
+
 - vrspace/babylon/video-test.js
--- OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+  - OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+
 - vrspace/babylon/sound-test.js
--- OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+  - OPENVIDU_SERVER_URLとOPENVIDU_SERVER_SECRETを修正
+
 - vrspace/server/src/main/resources/application.propertiesの
--- `openvidu.publicurl`
--- `openvidu.secret`
--- `sketchfab.redirectUri`
--- `spring.security.oauth2.client.registration.facebook.redirect-uri`
--- `spring.security.oauth2.client.registration.google.redirect-uri`を修正
+  - `openvidu.publicurl`
+  - `openvidu.secret`
+  - `sketchfab.redirectUri`
+  - `spring.security.oauth2.client.registration.facebook.redirect-uri`
+  - `spring.security.oauth2.client.registration.google.redirect-uri`を修正
 
 自分のGitHubへforkした場合は以下の環境変数を変更してください。
 ```
