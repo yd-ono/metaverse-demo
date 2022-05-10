@@ -34,9 +34,9 @@ spec:
             - name: COTURN_REDIS_IP
               value: redis
             - name: COTURN_REDIS_PASSWORD
-              value: vrtest123
+              value: ${OPENVIDU_SERVER_SECRET} 
             - name: DOMAIN_OR_PUBLIC_IP
-              value: openvidu-openvidu.${BASE_DOMAIN}
+              value: video.${BASE_DOMAIN}
             - name: HTTPS_PORT
               value: "443"
             - name: HTTP_PORT
@@ -64,7 +64,7 @@ spec:
             - name: OPENVIDU_RECORDING_PUBLIC_ACCESS
               value: "false"
             - name: OPENVIDU_SECRET
-              value: vrtest123
+              value: ${OPENVIDU_SERVER_SECRET} 
             - name: OPENVIDU_SESSIONS_GARBAGE_INTERVAL
               value: "900"
             - name: OPENVIDU_SESSIONS_GARBAGE_THRESHOLD

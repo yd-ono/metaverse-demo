@@ -40,7 +40,7 @@ spec:
             - name: DB_NAME
               value: "0"
             - name: DB_PASSWORD
-              value: vrtest123
+              value: ${OPENVIDU_SERVER_SECRET} 
             - name: REDIS_IP
               value: redis 
           image: openvidu/openvidu-coturn:6.0.0

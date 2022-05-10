@@ -8,7 +8,7 @@ metadata:
   name: openvidu-server
   namespace: openvidu
 spec:
-  host: openvidu-openvidu.${BASE_DOMAIN}
+  host: video.${BASE_DOMAIN}
   port:
     targetPort: "5443"
   tls:

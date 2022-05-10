@@ -48,6 +48,7 @@ gomplate -f manifest/openvidu/openvidu-server-route.yaml | envsubst | oc apply -
 
 ```
 export VRSPACE_SERVER_URL=<vrspaceのサーバURL>
+export OPENVIDU_SERVER_URL=`oc get route openvidu-server  -o jsonpath='{.status.ingress[0].host}'`
 oc new-project vrspace
 oc create sa vrspace
 oc adm policy add-scc-to-user privileged -z vrspace
