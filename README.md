@@ -3,6 +3,10 @@
 オープンソースのメタバースアプリケーションである[vrspace](https://www.vrspace.org/)をOpenShiftへdeployします。
 vrspaceの詳細は[こちら](https://redmine.vrspace.org/projects/vrspace-org/wiki)のRedmineをご参照ください。
 
+## 環境
+- OpenShift v4.8以降(4.8以前はテストしてません)
+- AWSまたはAzure
+
 ## 1. LET's Encrypt
 
 ```
@@ -24,9 +28,11 @@ gomplate -f manifest/openvidu/redis-deployment.yaml | envsubst | oc apply -f -
 gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 ```
 
+DNSレコードが更新されるまで1分ほど待ちます。
 
 ```
-export TURNIP=`oc get svc coturn-udp -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
+export TURN_DOMAIN=`oc get svc coturn-tcp -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
+export TURNIP=`dig $TURN_DOMAIN | grep -v ";" | grep $TURN_DOMAIN  | awk '{print $5}'`
 export MAILADDR=<your mail address>
 export BASE_DOMAIN=<your base domain>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
@@ -48,7 +54,7 @@ gomplate -f manifest/openvidu/openvidu-server-route.yaml | envsubst | oc apply -
 
 ```
 export VRSPACE_SERVER_URL=<vrspaceのサーバURL>
-export OPENVIDU_SERVER_URL=`oc get route openvidu-server  -o jsonpath='{.status.ingress[0].host}'`
+export OPENVIDU_SERVER_URL=`oc get route openvidu-server  -o jsonpath='{.status.ingress[*].host}'`
 oc new-project vrspace
 oc create sa vrspace
 oc adm policy add-scc-to-user privileged -z vrspace

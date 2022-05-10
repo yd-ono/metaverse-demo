@@ -8,7 +8,7 @@ metadata:
   name: loopback
   namespace: openvidu
 spec:
-  host: loopback-openvidu.${BASE_DOMAIN}
+  host: test.${BASE_DOMAIN}
   port:
     targetPort: "3000"
   tls:
