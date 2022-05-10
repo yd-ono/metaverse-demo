@@ -9,7 +9,7 @@ ENV OPENVIDU_SERVER_SECRET=${OPENVIDU_SERVER_SECRET}
 ENV VRSPACE_SERVER_URL=${VRSPACE_SERVER_URL}
 
 WORKDIR /app
-RUN git clone https://github.com/yd-ono/vrspace.git
+RUN git clone ${VRSPACE_GIT_URL}
 WORKDIR /app/vrspace
 RUN JAVA_HOME=/usr/lib/jvm/jre-11/ mvn clean install -DskipTests
 EXPOSE 8080
