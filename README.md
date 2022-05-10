@@ -14,6 +14,9 @@ oc adm policy add-cluster-role-to-user openshift-acme -z openshift-acme
 ## OpenVIDU
 
 ```
+export OPENVIDU_USERNAME=<任意のアカウント名>
+export OPENVIDU_SERVER_SECRET=<任意のパスワード>
+
 oc new-project openvidu
 oc create sa openvidu
 oc adm policy add-scc-to-user anyuid -z openvidu 
@@ -26,8 +29,6 @@ gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 export TURNIP=`oc get svc coturn-udp -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
 export MAILADDR=<your mail address>
 export BASE_DOMAIN=<your base domain>
-export OPENVIDU_USERNAME=<任意のアカウント名>
-export OPENVIDU_SERVER_SECRET=<任意のパスワード>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
 export TURN_LIST=`echo ${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@$TURNIP:3489 | base64`
 

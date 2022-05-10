@@ -32,7 +32,7 @@ spec:
         - name: STUN_LIST
           value: "$TURNIP:3478"
         - name: TURN_LIST
-          value: "myopenvidu:vrtest123@$TURNIP:3478"
+          value: "${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@$TURNIP:3478"
 ---
 apiVersion: v1
 kind: Service

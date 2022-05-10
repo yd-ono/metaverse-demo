@@ -34,7 +34,7 @@ spec:
             - name: KURENTO_LOG_FILE_SIZE
               value: "100"
             - name: KMS_TURN_URL
-              value: "myopenvidu:vrtest123@${TURNIP}:3478"
+              value: "${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@${TURNIP}:3478"
             - name: KMS_STUN_IP
               value: "${TURNIP}"
             - name: KMS_STUN_PORT
