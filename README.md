@@ -32,30 +32,32 @@ oc adm policy add-scc-to-user anyuid -z openvidu
 
 ```
 gomplate -f manifest/openvidu/redis-deployment.yaml | envsubst | oc apply -f -
-gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
+gomplate -f manifest/openvidu/coturn-service.yaml | envsubst | oc apply -f -
 ```
 
-DNSレコードが更新されるまで1分ほど待ちます。
-続いて以下の環境変数をセットします。
+coturnは`type:LoadBalancer`のServiceを使用します。
+AWS上にdeployする場合、NLBが新規作成され、DNSレコードが更新されるまで1分ほどかかります。
+
+以下の環境変数のうち、`TURNIP`が取得できるまで待ちます。
 
 ```
 export TURN_DOMAIN=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
 export TURNIP=`dig $TURN_DOMAIN | grep -v ";" | grep $TURN_DOMAIN  | awk '{print $5}'`
+```
+
+`TURNIP`をセットできたら、以下の環境変数もセットします。
+
+```
 export MAILADDR=<your mail address>
 export BASE_DOMAIN=<your base domain>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
 export TURN_LIST=`echo ${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@$TURNIP:3489 | base64`
 ```
 
-coturnの`--external-ip`オプションをServiceのExternal IPで更新します。
+`coturn`、`kurento`、`openvidu-server`をdeployします。
 
 ```
 gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
-```
-
-残りのアプリケーションもdeployします。
-
-```
 gomplate -f manifest/openvidu/kms-deployment.yaml | envsubst | oc apply -f -
 gomplate -f manifest/openvidu/openvidu-server-deployment.yaml | envsubst | oc apply -f -
 ```
