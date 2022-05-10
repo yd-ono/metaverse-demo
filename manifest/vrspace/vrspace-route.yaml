@@ -8,7 +8,7 @@ metadata:
   name: vrspace
   namespace: vrspace
 spec:
-  host: vrspace-vrspace.${BASE_DOMAIN}
+  host: ${VRSPACE_SERVER_URL}
   port:
     targetPort: "8080"
   tls:

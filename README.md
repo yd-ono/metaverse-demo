@@ -115,17 +115,17 @@ export VRSPACE_SERVER_URL=vrspace.${BASE_DOMAIN}
 ```
 oc new-project vrspace
 oc create sa vrspace
+oc adm policy add-scc-to-user anyuid -z vrspace
 oc adm policy add-scc-to-user privileged -z vrspace
 ```
 
 ```
 gomplate -f manifest/vrspace/Dockerfile | envsubst | oc new-build --dockerfile=- --to=vrspace -
-oc new-app vrspace:latest
-oc set sa deployment/vrspace vrspace
 ```
 
 ```
+gomplate -f manifest/vrspace/vrspace-deployment.yaml | envsubst | oc apply -f -
 cat manifest/vrspace/vrspace-route.yaml | envsubst | oc apply -f -
 ```
 
-access to https://${VRSPACE_SERVER_URL}/avatar-selection.html
+access to https://${VRSPACE_SERVER_URL}/babylon/avatar-selection.html

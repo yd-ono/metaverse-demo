@@ -30,6 +30,13 @@ spec:
       - image: image-registry.openshift-image-registry.svc:5000/vrspace/vrspace:latest
         imagePullPolicy: IfNotPresent
         name: vrspace
+        env:
+        - name: OPENVIDU_SERVER_URLE
+          value: ${OPENVIDU_SERVER_URL}
+        - name: OPENVIDU_SERVER_SECRET
+          value: ${OPENVIDU_SERVER_SECRET}
+        - name: VRSPACE_SERVER_URL
+          value: ${VRSPACE_SERVER_URL}
         ports:
         - containerPort: 8080
           protocol: TCP
