@@ -1,9 +1,9 @@
-# vr-webrtc-demo
+# OpenShiftでVRspaceとOpenVidu 
 
-## 環境
-- ARO
+オープンソースのメタバースアプリケーションである[vrspace](https://www.vrspace.org/)をOpenShiftへdeployします。
+vrspaceの詳細は[こちら](https://redmine.vrspace.org/projects/vrspace-org/wiki)のRedmineをご参照ください。
 
-## LET's Encrypt
+## 1. LET's Encrypt
 
 ```
 oc new-project letsencrypt
@@ -24,10 +24,12 @@ gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 
 ```
 export TURNIP=`oc get svc coturn-udp -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
-export MAILADDR=yono@redhat.com
-export BASE_DOMAIN=apps.fjuwuqfj.eastus.aroapp.io
+export MAILADDR=<your mail address>
+export BASE_DOMAIN=<your base domain>
+export OPENVIDU_USERNAME=<任意のアカウント名>
+export OPENVIDU_SERVER_SECRET=<任意のパスワード>
 export STUN_LIST=`echo $TURNIP:3489 | base64`
-export TURN_LIST=`echo myopenvidu:vrtest123@$TURNIP:3489 | base64`
+export TURN_LIST=`echo ${OPENVIDU_USERNAME}:${OPENVIDU_SERVER_SECRET}@$TURNIP:3489 | base64`
 
 gomplate -f manifest/openvidu/coturn-deployment.yaml | envsubst | oc apply -f -
 ```
@@ -44,6 +46,7 @@ gomplate -f manifest/openvidu/openvidu-server-route.yaml | envsubst | oc apply -
 ## VRSpace
 
 ```
+export VRSPACE_SERVER_URL=<vrspaceのサーバURL>
 oc new-project vrspace
 oc create sa vrspace
 oc adm policy add-scc-to-user privileged -z vrspace

@@ -1,5 +1,13 @@
 FROM registry.access.redhat.com/ubi8/ubi
+ARG openvidu_server_url
+ARG openvidu_server_secret
+ARG vrspace_server_url
+
 RUN dnf -y install maven git java-11-openjdk
+ENV OPENVIDU_SERVER_URL=${OPENVIDU_SERVER_URL}
+ENV OPENVIDU_SERVER_SECRET=${OPENVIDU_SERVER_SECRET}
+ENV VRSPACE_SERVER_URL=${VRSPACE_SERVER_URL}
+
 WORKDIR /app
 RUN git clone https://github.com/yd-ono/vrspace.git
 WORKDIR /app/vrspace
