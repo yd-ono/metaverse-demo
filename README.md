@@ -112,6 +112,10 @@ export VRSPACE_GIT_URL=https://github.com/yd-ono/vrspace
 export VRSPACE_SERVER_URL=vrspace.${BASE_DOMAIN}
 ```
 
+あとは、OpenShiftでコンテナイメージをBuildしてデプロイするだけです。
+もちろん、ローカルのPCなどでBuildしても良いです。
+
+Buildする前に以下の通りService Accountを作っておきましょう。
 ```
 oc new-project vrspace
 oc create sa vrspace
@@ -119,10 +123,14 @@ oc adm policy add-scc-to-user anyuid -z vrspace
 oc adm policy add-scc-to-user privileged -z vrspace
 ```
 
+※SCCは上記で設定しないと動きませんでした…セキュリティレベルが物凄く低下するので他の方法を調査中です…
+
+Buildします。
 ```
 gomplate -f manifest/vrspace/Dockerfile | envsubst | oc new-build --dockerfile=- --to=vrspace -
 ```
 
+最後に、DeployしてRouteを設定します。
 ```
 gomplate -f manifest/vrspace/vrspace-deployment.yaml | envsubst | oc apply -f -
 cat manifest/vrspace/vrspace-route.yaml | envsubst | oc apply -f -
