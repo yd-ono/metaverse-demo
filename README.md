@@ -17,8 +17,8 @@ oc create -fhttps://raw.githubusercontent.com/tnozicka/openshift-acme/master/dep
 oc adm policy add-cluster-role-to-user openshift-acme -z openshift-acme
 ```
 
-## OpenVIDU
-ビデオ会議や音声チャットなどを有効にするためにはOpenVIDUの構築が必要です。
+## OpenVidu
+ビデオ会議や音声チャットなどを有効にするためにはOpenViduの構築が必要です。
 まず、以下の環境変数をセットします。
 
 ```
@@ -40,7 +40,7 @@ gomplate -f manifest/openvidu/coturn-service.yaml | envsubst | oc apply -f -
 coturnは`type:LoadBalancer`のServiceを使用します。
 AWS上にdeployする場合、NLBが新規作成され、DNSレコードが更新されるまで1分ほどかかります。
 
-以下の環境変数のうち、`TURNIP`が取得できるまで待ちます。
+以下の環境変数`TURNIP`が取得できるまで待ちます。
 
 ```
 export TURN_DOMAIN=`oc get svc coturn -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'`
