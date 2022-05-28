@@ -7,7 +7,7 @@ vrspaceの詳細は[こちら](https://redmine.vrspace.org/projects/vrspace-org/
 - OpenShift v4.8以降(4.8以前はテストしてません)
 - AWSまたはAzure
 - [gomplate](https://docs.gomplate.ca/)
-- [envsbust(https://qiita.com/reflet/items/f69ec31a0ba38dcef5a7)
+- [envsbust](https://qiita.com/reflet/items/f69ec31a0ba38dcef5a7)
 
 ## 1. LET's Encrypt
 
